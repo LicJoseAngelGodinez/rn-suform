@@ -34,18 +34,31 @@ export default class Index extends React.Component {
 
     let credentials = 2;
     let userName = null;
+    let msg = null;
 
     if (props.navigation.getParam('credentials') != 2) {
         credentials = props.navigation.getParam('credentials');
         userName = props.navigation.getParam('userName');
         this.setValue('userData', JSON.stringify(credentials));
+
+        try {
+            msg = props.navigation.getParam('msg');
+        } catch (error) {
+            
+        }
     }
 
     this.state = {
         credentials: credentials,
         username: userName,
+        tkSesion: credentials.tkSesion,
+        msg: msg
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
+    if ( msg ) {
+        Alert.alert(msg.title, entities.decode(msg.msg));
+    }
   }
 
   async loadCredentials() {
@@ -128,14 +141,8 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const { username, credentials } = this.state;
-    let userName = username;
-    
-    if ( credentials != null ) {      
-      userName = this.state.credentials.nombre + ' ' + this.state.credentials.apellidos;
-    }
-    
-    console.log({cred: credentials, usr: userName});
+    const { username, credentials, tkSesion } = this.state;
+
     const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
       {
         inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
@@ -154,7 +161,7 @@ export default class Index extends React.Component {
         extrapolate: 'clamp'
       });
 
-    if (userName != null) {
+    if (username != null) {
       return (
         <View style={myStyles.MainContainer}>
           <Animated.View
@@ -167,7 +174,7 @@ export default class Index extends React.Component {
             ]}>
 
             <Text style={myStyles.HeaderInsideText}>
-              {entities.decode(userName)}
+              {entities.decode(username)}
             </Text>
           </Animated.View>
           <ScrollView
@@ -177,7 +184,12 @@ export default class Index extends React.Component {
               { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
             ])}>
             {/* Put all your Component here inside the ScrollView */}
-            <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Integrations')}>
+            <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate({
+                        routeName: 'Wait',
+                        params: {
+                            goTo: 1,
+                            tkSesion: tkSesion
+                        }})}>
               <View style={myStyles.mainMenuButton}>
                 <Image
                   source={require('./../assets/images/key.png')}
