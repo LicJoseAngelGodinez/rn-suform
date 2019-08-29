@@ -95,6 +95,7 @@ export default class Home extends React.Component {
   }
 
   loadTokens = () => {
+    this.ShowHideActivityIndicator();
     const { tkSesion } = this.state;
 
     let urlIntegracion = 'https://api.salesup.com/integraciones?pagina=0';
@@ -132,7 +133,7 @@ export default class Home extends React.Component {
       });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 

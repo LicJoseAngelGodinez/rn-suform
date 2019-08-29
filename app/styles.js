@@ -62,50 +62,50 @@ export default StyleSheet.create({
     MainContainer: {
         flex: 1,
         paddingTop: Platform.OS == 'ios' ? 20 : 0,
-      },
-    
-      Header: {
+    },
+
+    Header: {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
         left: 0,
         right: 0,
         top: Platform.OS == 'ios' ? 20 : 0,
-      },
-    
-      HeaderInsideText: {
+    },
+
+    HeaderInsideText: {
         color: '#fff',
         fontSize: RFValue(25),
         textAlign: 'center',
-      },
-    
-      TextViewStyle: {
+    },
+
+    TextViewStyle: {
         textAlign: 'center',
         color: '#000',
         fontSize: 18,
         margin: 5,
         padding: 7,
-      },
-    
-      containerButtonCard: {
+    },
+
+    containerButtonCard: {
         height: vh(10),
         margin: 5
-      },
-    
-      imageButtonCard: {
+    },
+
+    imageButtonCard: {
         width: '100%',
         height: '100%',
         marginBottom: 5,
-      },
-    
-      buttonIcon: {
+    },
+
+    buttonIcon: {
         width: 30,
         height: 30,
         marginLeft: 15,
         justifyContent: 'center'
-      },
-    
-      mainMenuButton: {
+    },
+
+    mainMenuButton: {
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 0,
@@ -118,23 +118,52 @@ export default StyleSheet.create({
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
         elevation: 3, // Android   
-      },
-    
-      ImageIconStyle: {
+    },
+
+    ImageIconStyle: {
         padding: 20,
         margin: 15,
         height: 40,
         width: 40,
         resizeMode: 'stretch',
-    
-      },
-    
-      TextStyle: {
-    
+
+    },
+
+    TextStyle: {
+
         fontSize: vmax(2.5),
         color: "#7b1fa2",
         marginBottom: 4,
         marginRight: 20,
-    
-      },
+
+    },
+    //   Integraciones
+
+    tokenElement: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderWidth: .5,
+        borderColor: '#7b1fa2',
+        height: 60,
+        borderRadius: 3,
+        margin: 4,
+    },
+    tokenElementSelected: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#e040fb',
+        borderWidth: .5,
+        borderColor: '#7b1fa2',
+        height: 60,
+        borderRadius: 3,
+        margin: 4,
+    },
+    ImageIconStyle: {
+        padding: 20,
+        margin: 5,
+        height: 40,
+        width: 40,
+        resizeMode : 'stretch',      
+     },
 });

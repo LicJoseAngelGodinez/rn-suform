@@ -58,16 +58,20 @@ export default class Wait extends React.Component {
                 case 1:
                     
                     let tkSesion = props.navigation.getParam('tkSesion');
-
                     try {
                         const dataTokens = await AsyncStorage.getItem('dataTokens');
-                        this.props.navigation.navigate({
-                            routeName: 'Integrations',
-                            params: {
-                                dataTokens: dataTokens,
-                                tkSesion: tkSesion
-                            }
-                        })
+                        if ( dataTokens ) {
+
+                            this.props.navigation.navigate({
+                                routeName: 'Integrations',
+                                params: {
+                                    dataTokens: dataTokens,
+                                    tkSesion: tkSesion
+                                }
+                            })
+                        } else {
+                            this.loadTokens(tkSesion);
+                        }
                         
                       } catch (error) {
                           this.loadTokens(tkSesion);                        

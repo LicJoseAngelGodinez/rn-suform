@@ -142,7 +142,7 @@ export default class Index extends React.Component {
 
   render() {
     const { username, credentials, tkSesion } = this.state;
-
+debugger;
     const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
       {
         inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],
