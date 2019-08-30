@@ -17,6 +17,7 @@ import {
 
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import { StackActions } from 'react-navigation';
 
 import Entities from 'html-entities';
 import myStyles from './../styles';
@@ -33,7 +34,7 @@ export default class Integrations extends React.Component {
   constructor(props) {
     super(props);
     this.AnimatedHeaderValue = new Animated.Value(0);
-debugger;
+
     let dataTokens = null;
     let tkSesion = null;
     let tkUsuario = null;
@@ -140,8 +141,13 @@ debugger;
   }
 
   backToHome() {
-    this.props.navigation.navigate('Home');
-    return false;
+    this.props.navigation.navigate({
+      routeName: 'Wait',
+      params: {
+        goTo: null
+      }
+    });
+    return true;
 
   }
 

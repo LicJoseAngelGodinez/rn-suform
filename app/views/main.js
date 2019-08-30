@@ -38,12 +38,12 @@ export default class Main extends React.Component {
       tkSesion: null,
       msg: null
     };
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    this.closeSessionAction = this.closeSessionAction.bind(this);
     this.loadCredentials = this.loadCredentials.bind(this);
   }
 
   async loadCredentials() {
-    //debugger;
+
     if (this.props.navigation.getParam('credentials') != 2) {
       this.setState({ credentials: this.props.navigation.getParam('credentials') });
       this.setState({ username: this.props.navigation.getParam('userName') });
@@ -67,7 +67,12 @@ export default class Main extends React.Component {
     this.removeValue('userData');
     this.removeValue('dataTokens');
     this.setState(Object.assign(...Object.keys(this.state).map(k => ({ [k]: null }))))
-    this.props.navigation.navigate('Login');
+    this.props.navigation.navigate({
+      routeName: 'Wait',
+      params: {
+        goTo: null
+      }
+    });
   }
 
   setValue = async (key, value) => {
@@ -90,10 +95,14 @@ export default class Main extends React.Component {
 
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.addEventListener('hardwareBackPress', this.closeSessionAction);
   }
 
-  handleBackButtonClick() {
+  componentWillUnmount () {
+    BackHandler.removeEventListener('hardwareBackPress', this.closeSessionAction)
+  }
+
+  closeSessionAction() {
     Alert.alert(
       'Cerrar',
       entities.decode('Va a cerrar sesi&oacute;n, desea continuar?'),
@@ -132,7 +141,7 @@ export default class Main extends React.Component {
 
   render() {
     const { username, credentials, tkSesion } = this.state;
-debugger;
+
     const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
       {
         inputRange: [0, (Header_Maximum_Height - Header_Minimum_Height)],

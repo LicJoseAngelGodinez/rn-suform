@@ -10,6 +10,7 @@ import {
     Keyboard,
     ToastAndroid,
     ActivityIndicator,
+    BackHandler,
 } from 'react-native';
 
 import myStyles from './../styles';
@@ -32,7 +33,39 @@ export default class LoginView extends Component {
             isLoading: false,
             Isbuttonenable: false,
         };
+        this.exitAppAction = this.exitAppAction.bind(this);
     }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.exitAppAction);
+      }
+    
+      componentWillUnmount () {
+        BackHandler.removeEventListener('hardwareBackPress', this.exitAppAction)
+      }
+    
+      exitAppAction() {
+        Alert.alert(
+          'Salir',
+          entities.decode('Desea salir de la aplicaci&oacute;n?'),
+          [
+            {
+              text: 'Cancelar',
+              style: 'cancel',
+            },
+            {
+              text: 'Salir',
+              onPress: () => {   
+                  BackHandler.exitApp();         
+                return true;
+              }
+            },
+          ],
+          { cancelable: true },
+        );
+        return true;
+    
+      }
 
     toast(msg) {
         ToastAndroid.showWithGravityAndOffset(

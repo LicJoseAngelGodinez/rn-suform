@@ -42,7 +42,8 @@ export default class Wait extends React.Component {
                         routeName: 'Main',
                         params: {
                             credentials: dataTemp,
-                            userName: userName
+                            userName: userName,
+                            tkSesion: dataTemp.tkSesion
                         }
                     });
                 } else {
@@ -58,7 +59,7 @@ export default class Wait extends React.Component {
                 case 1:
                     
                     let tkSesion = props.navigation.getParam('tkSesion');
-                    debugger;
+                    
                     try {
                         const dataTokens = await AsyncStorage.getItem('dataTokens');
                         if ( dataTokens && Array.isArray(dataTokens) ) {
@@ -145,7 +146,7 @@ export default class Wait extends React.Component {
                     });
 
                     AsyncStorage.setItem('dataTokens', JSON.stringify(dataTemp));
-                    debugger;
+
                     this.props.navigation.navigate({
                         routeName: 'Integrations',
                         params: {
@@ -176,6 +177,7 @@ export default class Wait extends React.Component {
             params: {
                 credentials: credentials,
                 userName: userName,
+                tkSesion: credentials.tkSesion,
                 msg: {
                     title: title,
                     msg: msg
