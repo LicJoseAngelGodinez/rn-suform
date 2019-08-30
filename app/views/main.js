@@ -15,6 +15,7 @@ import {
 
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import { NavigationEvents } from 'react-navigation';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import Entities from 'html-entities';
@@ -26,49 +27,39 @@ const Header_Maximum_Height = 200;
 
 const Header_Minimum_Height = vh(10);
 
-export default class Index extends React.Component {
+export default class Main extends React.Component {
 
   constructor(props) {
     super(props);
     this.AnimatedHeaderValue = new Animated.Value(0);
-
-    let credentials = 2;
-    let userName = null;
-    let msg = null;
-
-    if (props.navigation.getParam('credentials') != 2) {
-        credentials = props.navigation.getParam('credentials');
-        userName = props.navigation.getParam('userName');
-        this.setValue('userData', JSON.stringify(credentials));
-
-        try {
-            msg = props.navigation.getParam('msg');
-        } catch (error) {
-            
-        }
-    }
-
     this.state = {
-        credentials: credentials,
-        username: userName,
-        tkSesion: credentials.tkSesion,
-        msg: msg
+      credentials: 2,
+      username: null,
+      tkSesion: null,
+      msg: null
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-
-    if ( msg ) {
-        Alert.alert(msg.title, entities.decode(msg.msg));
-    }
+    this.loadCredentials = this.loadCredentials.bind(this);
   }
 
   async loadCredentials() {
-    try {
-      const credentials = await AsyncStorage.getItem('userData');
-      console.log({credentials: credentials});
-      this.setState({ credentials: JSON.parse(credentials) });
-    }
-    catch (error) {
-      // Manage error handling
+    //debugger;
+    if (this.props.navigation.getParam('credentials') != 2) {
+      this.setState({ credentials: this.props.navigation.getParam('credentials') });
+      this.setState({ username: this.props.navigation.getParam('userName') });
+      this.setState({ tkSesion: this.props.navigation.getParam('tkSesion') });
+      this.setValue('userData', JSON.stringify(this.props.navigation.getParam('credentials')));
+
+      try {
+        let msg = this.props.navigation.getParam('msg');
+        this.setState.msg = msg;
+        if (msg) {
+          Alert.alert(msg.title, entities.decode(msg.msg));
+        }
+      } catch (error) {
+
+      }
+
     }
   }
 
@@ -103,7 +94,6 @@ export default class Index extends React.Component {
   }
 
   handleBackButtonClick() {
-
     Alert.alert(
       'Cerrar',
       entities.decode('Va a cerrar sesi&oacute;n, desea continuar?'),
@@ -268,92 +258,13 @@ debugger;
     } else {
       return (
         <View style={myStyles.container}>
-          <Text>Has entrado!</Text>
+          <NavigationEvents
+                onDidFocus={() => this.loadCredentials(this.props)}
+                />
         </View>
       );
     }
   }
 }
-
-const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1,
-    paddingTop: Platform.OS == 'ios' ? 20 : 0,
-  },
-
-  Header: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: Platform.OS == 'ios' ? 20 : 0,
-  },
-
-  HeaderInsideText: {
-    color: '#fff',
-    fontSize: RFValue(25),
-    textAlign: 'center',
-  },
-
-  TextViewStyle: {
-    textAlign: 'center',
-    color: '#000',
-    fontSize: 18,
-    margin: 5,
-    padding: 7,
-  },
-
-  containerButtonCard: {
-    height: vh(10),
-    margin: 5
-  },
-
-  imageButtonCard: {
-    width: '100%',
-    height: '100%',
-    marginBottom: 5,
-  },
-
-  buttonIcon: {
-    width: 30,
-    height: 30,
-    marginLeft: 15,
-    justifyContent: 'center'
-  },
-
-  mainMenuButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 0,
-    borderColor: '#7b1fa2',
-    height: 100,
-    borderRadius: 5,
-    margin: 5,
-    shadowColor: 'rgba(0,0,0, .4)', // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 1, // IOS
-    shadowRadius: 1, //IOS
-    elevation: 3, // Android   
-  },
-
-  ImageIconStyle: {
-    padding: 20,
-    margin: 15,
-    height: 40,
-    width: 40,
-    resizeMode: 'stretch',
-
-  },
-
-  TextStyle: {
-
-    fontSize: vmax(2.5),
-    color: "#7b1fa2",
-    marginBottom: 4,
-    marginRight: 20,
-
-  },
-});
 
 

@@ -37,7 +37,7 @@ const Router = createStackNavigator({
         screen: Integrations,
         navigationOptions: {
             title: entities.decode('Tokens de Integraci&oacute;n'),
-            headerLeft: null,
+            // headerLeft: null,
             headerStyle: {
                 backgroundColor: '#fff',
                 paddingBottom: vh(3),

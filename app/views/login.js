@@ -94,7 +94,8 @@ export default class LoginView extends Component {
                         routeName:'Main', 
                         params: {
                             credentials     : responseJson[0],
-                            userName        : userTemp
+                            userName        : userTemp,
+                            tkSesion        : responseJson[0].tkSesion
                         }});
                 } else {
                     this.ShowHideActivityIndicator();

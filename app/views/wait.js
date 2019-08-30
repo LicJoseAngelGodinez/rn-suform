@@ -25,7 +25,7 @@ export default class Wait extends React.Component {
             credentials: null,
         }
         this.redirectViews(props);
-        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+        // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     async redirectViews(props) {
@@ -58,9 +58,10 @@ export default class Wait extends React.Component {
                 case 1:
                     
                     let tkSesion = props.navigation.getParam('tkSesion');
+                    debugger;
                     try {
                         const dataTokens = await AsyncStorage.getItem('dataTokens');
-                        if ( dataTokens ) {
+                        if ( dataTokens && Array.isArray(dataTokens) ) {
 
                             this.props.navigation.navigate({
                                 routeName: 'Integrations',
@@ -85,44 +86,44 @@ export default class Wait extends React.Component {
         }
     }
 
-    componentDidMount() {
-        BackHandler.addEventListener(
-            'hardwareBackPress',
-            this.handleBackButtonClick
-        );
+    // componentDidMount() {
+    //     BackHandler.addEventListener(
+    //         'hardwareBackPress',
+    //         this.handleBackButtonClick
+    //     );
 
-        const { navigation } = this.props;
-        //Adding an event listner om focus
-        //So whenever the screen will have focus it will set the state to zero
-        this.focusListener = navigation.addListener('didFocus', () => {
-            this.setState({ count: 0 });
-        });
-    }
+    //     const { navigation } = this.props;
+    //     //Adding an event listner om focus
+    //     //So whenever the screen will have focus it will set the state to zero
+    //     this.focusListener = navigation.addListener('didFocus', () => {
+    //         this.setState({ count: 0 });
+    //     });
+    // }
 
-    handleBackButtonClick() {
+    // handleBackButtonClick() {
 
-        Alert.alert(
-            'Cancelar',
-            entities.decode('Desea salir de la aplicaci&oacute;n?'),
-            [
-                {
-                    text: 'Cancelar',
-                    style: 'cancel'
-                },
-                {
-                    text: 'Salir',
-                    onPress: () => {
-                        BackHandler.exitApp();
-                        return true;
-                    }
-                },
-            ],
-            {
-                cancelable: true
-            },
-        );
-        return true;
-    }
+    //     Alert.alert(
+    //         'Cancelar',
+    //         entities.decode('Desea salir de la aplicaci&oacute;n?'),
+    //         [
+    //             {
+    //                 text: 'Cancelar',
+    //                 style: 'cancel'
+    //             },
+    //             {
+    //                 text: 'Salir',
+    //                 onPress: () => {
+    //                     BackHandler.exitApp();
+    //                     return true;
+    //                 }
+    //             },
+    //         ],
+    //         {
+    //             cancelable: true
+    //         },
+    //     );
+    //     return true;
+    // }
 
     async loadTokens(tkSesion) {
 
@@ -144,7 +145,7 @@ export default class Wait extends React.Component {
                     });
 
                     AsyncStorage.setItem('dataTokens', JSON.stringify(dataTemp));
-
+                    debugger;
                     this.props.navigation.navigate({
                         routeName: 'Integrations',
                         params: {

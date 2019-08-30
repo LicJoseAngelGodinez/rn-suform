@@ -159,7 +159,7 @@ export default StyleSheet.create({
         borderRadius: 3,
         margin: 4,
     },
-    ImageIconStyle: {
+    ImageIconStyleInegrations: {
         padding: 20,
         margin: 5,
         height: 40,

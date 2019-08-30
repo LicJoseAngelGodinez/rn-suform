@@ -28,12 +28,12 @@ const Header_Maximum_Height = 200;
 
 const Header_Minimum_Height = vh(10);
 
-export default class Home extends React.Component {
+export default class Integrations extends React.Component {
 
   constructor(props) {
     super(props);
     this.AnimatedHeaderValue = new Animated.Value(0);
-
+debugger;
     let dataTokens = null;
     let tkSesion = null;
     let tkUsuario = null;
@@ -41,12 +41,14 @@ export default class Home extends React.Component {
 
     if (props.navigation.getParam('dataTokens')) {
         dataTokens = props.navigation.getParam('dataTokens');
-        dataTokens = JSON.parse(dataTokens);
+        dataTokens = ( typeof dataTokens == 'string' ) ? JSON.parse(dataTokens) : dataTokens;
         tkSesion = props.navigation.getParam('tkSesion');
         // userData = await AsyncStorage.getItem('userData');
         // userData = JSON.parse(userData);
         // tkUsuario = userData.tkUsuario;
     }
+
+    props.navigation.state.params.goTo = null;
 
     this.state = {
       tkSesion: tkSesion,
@@ -56,7 +58,7 @@ export default class Home extends React.Component {
       selectedToken: null,
     };
     //this.loadCredentials();
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    this.backToHome = this.backToHome.bind(this);
   }
 
   async loadCredentials() {
@@ -134,17 +136,12 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.addEventListener('hardwareBackPress', this.backToHome);
   }
 
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-  }
-
-  handleBackButtonClick() {
-
+  backToHome() {
     this.props.navigation.navigate('Home');
-    return true;
+    return false;
 
   }
 
@@ -191,7 +188,7 @@ export default class Home extends React.Component {
                 <View>
                   <Image 
                   source={require('./../assets/images/login.png')} 
-                  style={myStyles.ImageIconStyle} 
+                  style={myStyles.ImageIconStyleInegrations} 
                   />
                 </View>
                 <View style={{paddingTop: 3, flex: 1, paddingRight: 10 }}>
