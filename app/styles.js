@@ -24,7 +24,8 @@ export default StyleSheet.create({
         height: 45,
         marginBottom: 20,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        elevation: 4
     },
     inputs: {
         height: 45,
@@ -48,6 +49,7 @@ export default StyleSheet.create({
     },
     loginButton: {
         backgroundColor: "#7b1fa2",
+        elevation: 4
     },
     loginButtonDisabled: {
         backgroundColor: "#CDCDCD",
@@ -130,12 +132,10 @@ export default StyleSheet.create({
     },
 
     TextStyle: {
-
         fontSize: vmax(2.5),
         color: "#7b1fa2",
         marginBottom: 4,
         marginRight: 20,
-
     },
     //   Integraciones
 
@@ -152,7 +152,7 @@ export default StyleSheet.create({
     tokenElementSelected: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#e040fb',
+        backgroundColor: '#f3e5f5',
         borderWidth: .5,
         borderColor: '#7b1fa2',
         height: 60,
@@ -165,5 +165,11 @@ export default StyleSheet.create({
         height: 40,
         width: 40,
         resizeMode : 'stretch',      
+     },
+
+     HeaderViewInsideText: {
+        color: '#fff',
+        fontSize: RFValue(20),
+        textAlign: 'left',
      },
 });

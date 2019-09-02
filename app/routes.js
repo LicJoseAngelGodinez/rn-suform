@@ -1,3 +1,11 @@
+import React from 'react'
+
+import {
+    Text,
+    Alert,
+    TouchableHighlight
+} from 'react-native';
+
 import { 
     createStackNavigator,
     createAppContainer, 
@@ -7,6 +15,8 @@ import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 
 import Entities from 'html-entities';
 
+
+import myStyles from './styles';
 import Wait from './views/wait';
 import Login from './views/login';
 import Main from './views/main';
@@ -37,12 +47,22 @@ const Router = createStackNavigator({
         screen: Integrations,
         navigationOptions: {
             title: entities.decode('Tokens de Integraci&oacute;n'),
-            // headerLeft: null,
-            headerStyle: {
-                backgroundColor: '#fff',
-                paddingBottom: vh(3),
-                marginBottom: vh(1),
-            },
+            headerLeft: null,
+            // headerRight: (
+            //     <TouchableHighlight
+            //         style={{ 
+            //             paddingRight: 10,
+            //             fontSize: vmax(20),
+            //         }}
+            //         color="#7b1fa2"
+            //     >
+            //         <Text
+            //             style={{ 
+            //                 fontSize: vmax(2.5),
+            //             }}
+            //         >Guardar</Text>
+            //     </TouchableHighlight>
+            // ),
             headerTintColor: '#7b1fa2'
         }
     }

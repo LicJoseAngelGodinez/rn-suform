@@ -10,14 +10,16 @@ import {
   Animated,
   Platform,
   TouchableOpacity,
+  TouchableHighlight,
   ToastAndroid,
   ActivityIndicator,
   RefreshControl,
+  Button,
 } from 'react-native';
 
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
-import { StackActions } from 'react-navigation';
+import { StackActions, } from 'react-navigation';
 
 import Entities from 'html-entities';
 import myStyles from './../styles';
@@ -41,12 +43,12 @@ export default class Integrations extends React.Component {
     // let userData = null;
 
     if (props.navigation.getParam('dataTokens')) {
-        dataTokens = props.navigation.getParam('dataTokens');
-        dataTokens = ( typeof dataTokens == 'string' ) ? JSON.parse(dataTokens) : dataTokens;
-        tkSesion = props.navigation.getParam('tkSesion');
-        // userData = await AsyncStorage.getItem('userData');
-        // userData = JSON.parse(userData);
-        // tkUsuario = userData.tkUsuario;
+      dataTokens = props.navigation.getParam('dataTokens');
+      dataTokens = (typeof dataTokens == 'string') ? JSON.parse(dataTokens) : dataTokens;
+      tkSesion = props.navigation.getParam('tkSesion');
+      // userData = await AsyncStorage.getItem('userData');
+      // userData = JSON.parse(userData);
+      // tkUsuario = userData.tkUsuario;
     }
 
     props.navigation.state.params.goTo = null;
@@ -62,29 +64,49 @@ export default class Integrations extends React.Component {
     this.backToHome = this.backToHome.bind(this);
   }
 
+  static navigationOptions = ({ navigation }) => {
+    // const { params = {} } = navigation.state; //delete this
+     return {
+         headerRight: (
+           <TouchableOpacity 
+           style={{
+             paddingEnd: 10
+           }}
+           onPress={() => navigation.state.params.handleSave('Prueba', 'Token: nada')}>
+             <Text>Guardar</Text>
+           </TouchableOpacity>
+         )  // add navigation.state
+     };
+   };
+
+
   async loadCredentials() {
     try {
       try {
         const dataTokens = await AsyncStorage.getItem('dataTokens');
-        this.setState({dataTokens: JSON.parse(dataTokens)});
-        
+        this.setState({ dataTokens: JSON.parse(dataTokens) });
+
       } catch (error) {
-        
+
       }
       try {
         const selectedToken = await AsyncStorage.getItem('tokenSelected');
-        this.setState({selectedToken: selectedToken});
-        
+        this.setState({ selectedToken: selectedToken });
+
       } catch (error) {
-        
+
       }
-      if ( dataTokens == null ) {
+      if (dataTokens == null) {
         this.loadTokens();
       }
     }
     catch (error) {
       // Manage error handling
     }
+  }
+
+  alertExample (titulo, mensaje) {
+    Alert.alert(titulo, mensaje);
   }
 
   ShowHideActivityIndicator = () => {
@@ -116,13 +138,13 @@ export default class Integrations extends React.Component {
     fetch(urlIntegracion, dataHeader)
       .then((response) => response.json())
       .then((responseJson) => {
-        if ( responseJson ) {
-          let dataTemp = responseJson.filter(function(item){ 
-            return item.tipoIntegracion == 7 || item.tipoIntegracion == 8; 
+        if (responseJson) {
+          let dataTemp = responseJson.filter(function (item) {
+            return item.tipoIntegracion == 7 || item.tipoIntegracion == 8;
           });
-          
+
           AsyncStorage.setItem('dataTokens', JSON.stringify(dataTemp));
-          this.setState({dataTokens: dataTemp});
+          this.setState({ dataTokens: dataTemp });
           this.ShowHideActivityIndicator();
 
         } else {
@@ -138,6 +160,7 @@ export default class Integrations extends React.Component {
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.backToHome);
+    this.props.navigation.setParams({ handleSave: this.alertExample });
   }
 
   backToHome() {
@@ -151,30 +174,31 @@ export default class Integrations extends React.Component {
 
   }
 
-  selectToken = (buttonId) => {   
+  selectToken = (buttonId) => {
 
-    this.setState({selectedToken: buttonId});
+    this.setState({ selectedToken: buttonId });
     AsyncStorage.setItem('tokenSelected', buttonId);
   }
 
   _onRefresh = () => {
-    this.setState({refreshing: true});
+    this.setState({ refreshing: true });
     fetchData().then(() => {
-      this.setState({refreshing: false});
+      this.setState({ refreshing: false });
     });
   }
 
   render() {
-    
+
     const { dataTokens } = this.state;
 
     if (dataTokens && dataTokens.length > 0) {
-  
+
       return (
         <View style={myStyles.MainContainer}>
-          
+
           <ScrollView
             scrollEventThrottle={16}
+            contentContainerStyle={{ paddingTop: 0 }}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.isLoading}
@@ -185,25 +209,25 @@ export default class Integrations extends React.Component {
               { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
             ])}>
             {
-              
-              dataTokens.map( element => {
+
+              dataTokens.map(element => {
                 return (
-                  <TouchableOpacity key={element.tkIntegracion} style={this.state.selectedToken == element.tkIntegracion ? myStyles.tokenElementSelected : myStyles.tokenElement } activeOpacity={0.5} onPress={() => this.selectToken(element.tkIntegracion)}>
- 
-              <View style={{flexDirection: 'row'}}>
-                <View>
-                  <Image 
-                  source={require('./../assets/images/login.png')} 
-                  style={myStyles.ImageIconStyleInegrations} 
-                  />
-                </View>
-                <View style={{paddingTop: 3, flex: 1, paddingRight: 10 }}>
-                  <Text style={{textAlign: 'right', fontSize: 18}}>{element.config.nombre ? element.config.nombre : '- Sin nombre -'}</Text>
-                  <Text style={{textAlign: 'right', fontSize: 12, fontStyle: 'italic'}}>{element.tkIntegracion}</Text>
-                </View>
-              </View>
-      
-            </TouchableOpacity>
+                  <TouchableOpacity key={element.tkIntegracion} style={this.state.selectedToken == element.tkIntegracion ? myStyles.tokenElementSelected : myStyles.tokenElement} activeOpacity={0.5} onPress={() => this.selectToken(element.tkIntegracion)}>
+
+                    <View style={{ flexDirection: 'row' }}>
+                      <View>
+                        <Image
+                          source={require('./../assets/images/login.png')}
+                          style={myStyles.ImageIconStyleInegrations}
+                        />
+                      </View>
+                      <View style={{ paddingTop: 3, flex: 1, paddingRight: 10 }}>
+                        <Text style={{ textAlign: 'right', fontSize: 18 }}>{element.config.nombre ? element.config.nombre : '- Sin nombre -'}</Text>
+                        <Text style={{ textAlign: 'right', fontSize: 12, fontStyle: 'italic' }}>{element.tkIntegracion}</Text>
+                      </View>
+                    </View>
+
+                  </TouchableOpacity>
                 );
               })
             }

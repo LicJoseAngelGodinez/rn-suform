@@ -11,6 +11,7 @@ import {
     ToastAndroid,
     ActivityIndicator,
     BackHandler,
+    Button,
 } from 'react-native';
 
 import myStyles from './../styles';
@@ -28,6 +29,7 @@ export default class LoginView extends Component {
         super(props);
 
         this.state = {
+            user: '',
             email: '',
             password: '',
             isLoading: false,
@@ -95,9 +97,46 @@ export default class LoginView extends Component {
         Alert.alert("Alerta", "Has presionado: " + viewId);
     }
 
-    login = () => {
+    loadLoginData = (accounOption) => {
 
-        const { user, password } = this.state;
+        switch ( accounOption ) {
+            case 1:
+                this.login({
+                    user: 'salesupnewton@gmail.com',
+                    password: 'Salesup2016!'
+                });
+                break;
+
+            case 2:                
+                this.login({
+                    user: 'angel@prueba.com',
+                    password: 'Salesup2016!'
+                });
+                break;
+
+            case 3:
+                this.login({
+                    user: 'salesupsocrates@gmail.com',
+                    password: 'Salesup2016!'
+                });
+                break;
+        }
+    }
+
+    login = (obj) => {
+
+        let user = '';
+        let password = '';
+        if ( !obj ) {
+
+            const { user, password } = this.state;
+
+        } else {
+
+            user = ( obj.user );
+            password = ( obj.password );
+
+        }
 
         this.ShowHideActivityIndicator();
 
@@ -194,6 +233,36 @@ export default class LoginView extends Component {
                     onPress={() => this.toast('registro')}>
                     <Text style={!this.state.Isbuttonenable ? myStyles.loginText : myStyles.loginTextDisabled}>Registro</Text>
                 </TouchableHighlight>
+
+                <View style={{flexDirection: 'row'}}>
+                    <View style={{padding: 3}}>
+                        <Button
+                            onPress={() => this.loadLoginData(1)}
+                            title="Newton"
+                            color="#7b1fa2"
+                            disabled={this.state.Isbuttonenable}
+                            accessibilityLabel=" XXXX "
+                        />
+                    </View>
+                    <View style={{padding: 3}}>
+                        <Button
+                            onPress={() => this.loadLoginData(2)}
+                            title="Angel"
+                            color="#7b1fa2"
+                            disabled={this.state.Isbuttonenable}
+                            accessibilityLabel=" XXXX "
+                        />
+                    </View>
+                    <View style={{padding: 3}}>
+                        <Button
+                            onPress={() => this.loadLoginData(3)}
+                            title="Socrates"
+                            color="#7b1fa2"
+                            disabled={this.state.Isbuttonenable}
+                            accessibilityLabel=" XXXX "
+                        />
+                    </View>
+                </View>
 
             </View>
         );
