@@ -72,7 +72,7 @@ export default class Integrations extends React.Component {
            style={{
              paddingEnd: 10
            }}
-           onPress={() => navigation.state.params.handleSave('Prueba', 'Token: nada')}>
+           onPress={() => navigation.state.params.handleSave()}>
              <Text>Guardar</Text>
            </TouchableOpacity>
          )  // add navigation.state
@@ -105,8 +105,26 @@ export default class Integrations extends React.Component {
     }
   }
 
-  alertExample (titulo, mensaje) {
-    Alert.alert(titulo, mensaje);
+  async saveToken () {
+    try {
+      const selectedToken = await AsyncStorage.getItem('tokenSelected');
+      
+      ToastAndroid.showWithGravityAndOffset(
+        selectedToken,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    } catch (error) {
+      ToastAndroid.showWithGravityAndOffset(
+        'No hay token seleccionado',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    }
   }
 
   ShowHideActivityIndicator = () => {
@@ -160,7 +178,7 @@ export default class Integrations extends React.Component {
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.backToHome);
-    this.props.navigation.setParams({ handleSave: this.alertExample });
+    this.props.navigation.setParams({ handleSave: this.saveToken });
   }
 
   backToHome() {
