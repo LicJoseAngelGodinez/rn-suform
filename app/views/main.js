@@ -36,6 +36,7 @@ export default class Main extends React.Component {
       credentials: 2,
       username: null,
       tkSesion: null,
+      tkUsuario: null,
       msg: null
     };
     this.closeSessionAction = this.closeSessionAction.bind(this);
@@ -48,6 +49,7 @@ export default class Main extends React.Component {
       this.setState({ credentials: this.props.navigation.getParam('credentials') });
       this.setState({ username: this.props.navigation.getParam('userName') });
       this.setState({ tkSesion: this.props.navigation.getParam('tkSesion') });
+      this.setState({ tkUsuario: this.props.navigation.getParam('tkUsuario') });
       this.setValue('userData', JSON.stringify(this.props.navigation.getParam('credentials')));
 
       try {
@@ -139,8 +141,12 @@ export default class Main extends React.Component {
     );
   }
 
+  deleteSessionTokens () {
+    this.removeValue('tokenSeleccionado');
+  }
+
   render() {
-    const { username, credentials, tkSesion } = this.state;
+    const { username, tkUsuario, tkSesion } = this.state;
 
     const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
       {
@@ -187,7 +193,8 @@ export default class Main extends React.Component {
                         routeName: 'Wait',
                         params: {
                             goTo: 1,
-                            tkSesion: tkSesion
+                            tkSesion: tkSesion,
+                            tkUsuario: tkUsuario
                         }})}>
               <View style={myStyles.mainMenuButton}>
                 <Image
@@ -250,14 +257,14 @@ export default class Main extends React.Component {
                 <Text style={myStyles.TextStyle}> Opciones extra 1 </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.5}>
+            <TouchableOpacity activeOpacity={0.5} onPress={() => this.deleteSessionTokens()}>
             <View style={myStyles.mainMenuButton}>
                 <Image
                   source={require('./../assets/images/global-network.png')}
                   style={myStyles.ImageIconStyle}
                 />
 
-                <Text style={myStyles.TextStyle}> Opciones extra 2 </Text>
+                <Text style={myStyles.TextStyle}> Borrar tokens </Text>
                 </View>
             </TouchableOpacity>
           </ScrollView>

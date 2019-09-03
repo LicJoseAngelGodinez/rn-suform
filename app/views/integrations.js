@@ -46,7 +46,7 @@ export default class Integrations extends React.Component {
       dataTokens = props.navigation.getParam('dataTokens');
       dataTokens = (typeof dataTokens == 'string') ? JSON.parse(dataTokens) : dataTokens;
       tkSesion = props.navigation.getParam('tkSesion');
-      // userData = await AsyncStorage.getItem('userData');
+      tkUsuario = props.navigation.getParam('tkUsuario');
       // userData = JSON.parse(userData);
       // tkUsuario = userData.tkUsuario;
     }
@@ -106,11 +106,13 @@ export default class Integrations extends React.Component {
   }
 
   async saveToken () {
+    debugger;
     try {
       const selectedToken = await AsyncStorage.getItem('tokenSelected');
+      this.removeValue('tokenSelected');
       
       ToastAndroid.showWithGravityAndOffset(
-        selectedToken,
+        (selectedToken) ? 'El token:' + selectedToken : 'Sin token',
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
         25,
@@ -127,6 +129,63 @@ export default class Integrations extends React.Component {
     }
   }
 
+  async selectToken (obj) {
+
+    if ( obj.tkIntegracion == this.state.selectedToken ) {
+      this.setState({ selectedToken: null });
+    } else {
+      this.setState({ selectedToken: obj.tkIntegracion });      
+      this.setState({ tkUsuario: obj.tkUsuario });
+
+      let arrTemp = '';
+
+      try {
+        arrTemp = await AsyncStorage.getItem('tokenSeleccionado');
+
+        arrTemp = JSON.parse(arrTemp);
+
+        if ( arrTemp.length > 0 ) {
+
+          let found = arrTemp.filter(function(item){
+            return item.tkIntegracion == obj.tkIntegracion;
+          });
+
+          if ( found.length == 0 ) {
+            arrTemp.push(obj);
+            this.toastMsg('Nuevo: Se guarda');
+            this.setValue('tokenSeleccionado', JSON.stringify(arrTemp));
+          } else {
+            this.toastMsg('Ya existe');
+          }
+        } else {
+          this.toastMsg('Error-00: No se pudo parsear');
+          this.setValue('tokenSeleccionado', JSON.stringify([obj]));
+        }
+      } catch (error) {
+        this.toastMsg('Nuevo: No existian registros');
+        this.setValue('tokenSeleccionado', JSON.stringify([obj]));
+      }
+    }
+  }
+
+  toastMsg = (msg) => {
+    ToastAndroid.showWithGravityAndOffset(
+      msg,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      25,
+      50,
+    );
+  }
+
+  setValue = async (key, value) => {
+    try {
+      await AsyncStorage.setItem(key, value)
+    } catch(e) {
+      // save error
+    }
+  }
+
   ShowHideActivityIndicator = () => {
 
     if (this.state.isLoading == true) {
@@ -139,7 +198,7 @@ export default class Integrations extends React.Component {
 
   loadTokens = () => {
     this.ShowHideActivityIndicator();
-    const { tkSesion } = this.state;
+    const { tkSesion, tkUsuario } = this.state;
 
     let urlIntegracion = 'https://api.salesup.com/integraciones?pagina=0';
     let formData = new FormData();
@@ -152,7 +211,7 @@ export default class Integrations extends React.Component {
         "token": tkSesion
       }
     };
-
+    //console.log({loadTokens: tkUsuario});
     fetch(urlIntegracion, dataHeader)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -190,13 +249,7 @@ export default class Integrations extends React.Component {
     });
     return true;
 
-  }
-
-  selectToken = (buttonId) => {
-
-    this.setState({ selectedToken: buttonId });
-    AsyncStorage.setItem('tokenSelected', buttonId);
-  }
+  }  
 
   _onRefresh = () => {
     this.setState({ refreshing: true });
@@ -207,7 +260,7 @@ export default class Integrations extends React.Component {
 
   render() {
 
-    const { dataTokens } = this.state;
+    const { dataTokens, tkUsuario } = this.state;
 
     if (dataTokens && dataTokens.length > 0) {
 
@@ -230,7 +283,7 @@ export default class Integrations extends React.Component {
 
               dataTokens.map(element => {
                 return (
-                  <TouchableOpacity key={element.tkIntegracion} style={this.state.selectedToken == element.tkIntegracion ? myStyles.tokenElementSelected : myStyles.tokenElement} activeOpacity={0.5} onPress={() => this.selectToken(element.tkIntegracion)}>
+                  <TouchableOpacity key={element.tkIntegracion} style={this.state.selectedToken == element.tkIntegracion ? myStyles.tokenElementSelected : myStyles.tokenElement} activeOpacity={0.5} onPress={() => this.selectToken({tkIntegracion: element.tkIntegracion, tkUsuario: tkUsuario})}>
 
                     <View style={{ flexDirection: 'row' }}>
                       <View>

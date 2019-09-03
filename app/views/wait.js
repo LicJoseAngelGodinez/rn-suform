@@ -43,7 +43,8 @@ export default class Wait extends React.Component {
                         params: {
                             credentials: dataTemp,
                             userName: userName,
-                            tkSesion: dataTemp.tkSesion
+                            tkSesion: dataTemp.tkSesion,
+                            tkUsuario: dataTemp.tkUsuario
                         }
                     });
                 } else {
@@ -59,24 +60,27 @@ export default class Wait extends React.Component {
                 case 1:
                     
                     let tkSesion = props.navigation.getParam('tkSesion');
+                    let tkUsuario = props.navigation.getParam('tkUsuario');
                     
                     try {
                         const dataTokens = await AsyncStorage.getItem('dataTokens');
-                        if ( dataTokens && Array.isArray(dataTokens) ) {
+
+                        if ( dataTokens && Array.isArray(JSON.parse(dataTokens)) ) {
 
                             this.props.navigation.navigate({
                                 routeName: 'Integrations',
                                 params: {
                                     dataTokens: dataTokens,
-                                    tkSesion: tkSesion
+                                    tkSesion: tkSesion,
+                                    tkUsuario: tkUsuario
                                 }
                             })
                         } else {
-                            this.loadTokens(tkSesion);
+                            this.loadTokens(tkSesion, tkUsuario);
                         }
                         
                       } catch (error) {
-                          this.loadTokens(tkSesion);                        
+                          this.loadTokens(tkSesion, tkUsuario);                        
                       }
 
                     break;
@@ -126,7 +130,7 @@ export default class Wait extends React.Component {
     //     return true;
     // }
 
-    async loadTokens(tkSesion) {
+    async loadTokens(tkSesion, tkUsuario) {
 
         let urlIntegracion = 'https://api.salesup.com/integraciones?pagina=0';
 
@@ -151,7 +155,8 @@ export default class Wait extends React.Component {
                         routeName: 'Integrations',
                         params: {
                             dataTokens: dataTemp,
-                            tkSesion: tkSesion
+                            tkSesion: tkSesion,
+                            tkUsuario: tkUsuario
                         }
                     })                    
 
