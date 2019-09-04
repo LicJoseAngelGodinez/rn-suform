@@ -189,7 +189,7 @@ export default class Main extends React.Component {
               { nativeEvent: { contentOffset: { y: this.AnimatedHeaderValue } } },
             ])}>
             {/* Put all your Component here inside the ScrollView */}
-            <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate({
+            {/* <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate({
                         routeName: 'Wait',
                         params: {
                             goTo: 1,
@@ -203,7 +203,7 @@ export default class Main extends React.Component {
                 />
                 <Text style={myStyles.TextStyle}> {entities.decode('Tokens de integraci&oacute;n')} </Text>
               </View>              
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity activeOpacity={0.5} onPress={() => this.toast('Formularios')}>
 
             <View style={myStyles.mainMenuButton}>
@@ -257,7 +257,7 @@ export default class Main extends React.Component {
                 <Text style={myStyles.TextStyle}> Opciones extra 1 </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.5} onPress={() => this.deleteSessionTokens()}>
+            {/* <TouchableOpacity activeOpacity={0.5} onPress={() => this.deleteSessionTokens()}>
             <View style={myStyles.mainMenuButton}>
                 <Image
                   source={require('./../assets/images/global-network.png')}
@@ -266,7 +266,7 @@ export default class Main extends React.Component {
 
                 <Text style={myStyles.TextStyle}> Borrar tokens </Text>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </ScrollView>
 
         </View>

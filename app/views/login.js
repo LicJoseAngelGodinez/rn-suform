@@ -196,14 +196,14 @@ export default class LoginView extends Component {
                 <View style={myStyles.inputContainer}>
                     <Image style={myStyles.inputIcon} source={require('./../assets/images/mail.png')} />
                     <TextInput style={myStyles.inputs}
-                        placeholder={entities.decode('Correo electr&oacute;nico')}
-                        keyboardType="email-address"
+                        placeholder={entities.decode('Token de Integraci&oacute;n')}
+                        keyboardType="default"
                         autoCapitalize='none'
                         onChangeText={(user) => this.setState({ user })}
                     />
                 </View>
 
-                <View style={myStyles.inputContainer}>
+                {/* <View style={myStyles.inputContainer}>
                     <Image style={myStyles.inputIcon} source={require('./../assets/images/lock.png')} />
                     <TextInput style={myStyles.inputs}
                         placeholder={entities.decode('Contrase&ntilde;a')}
@@ -211,7 +211,7 @@ export default class LoginView extends Component {
                         autoCapitalize='none'
                         onChangeText={(password) => this.setState({ password })}
                     />
-                </View>
+                </View> */}
 
                 <TouchableHighlight
                     disabled={this.state.Isbuttonenable}
@@ -224,7 +224,7 @@ export default class LoginView extends Component {
                     disabled={this.state.Isbuttonenable}
                     style={myStyles.buttonContainer}
                     onPress={() => this.toast('recuperar_contrasenia')}>
-                    <Text style={!this.state.Isbuttonenable ? myStyles.loginText : myStyles.loginTextDisabled}>{entities.decode('Olvid&oacute; su contrase&ntilde;a?')}</Text>
+                    <Text style={!this.state.Isbuttonenable ? myStyles.loginText : myStyles.loginTextDisabled}>Solicitar Token</Text>
                 </TouchableHighlight>
 
                 <TouchableHighlight
