@@ -22,7 +22,7 @@ export default class Wait extends React.Component {
 
         super(props);
         this.state = {
-            credentials: null,
+            usersData: null,
         }
         this.redirectViews(props);
         // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -32,19 +32,13 @@ export default class Wait extends React.Component {
 
         if (!props.navigation.getParam('goTo')) {
             try {
-                let credentials = await AsyncStorage.getItem('userData');
-                if (credentials && credentials != 2) {
-
-                    let dataTemp = JSON.parse(credentials);
-                    let userName = `${dataTemp.nombre} ${dataTemp.apellidos}`;
+                let userData = await AsyncStorage.getItem('userData');
+                if (userData) {
 
                     this.props.navigation.navigate({
                         routeName: 'Main',
                         params: {
-                            credentials: dataTemp,
-                            userName: userName,
-                            tkSesion: dataTemp.tkSesion,
-                            tkUsuario: dataTemp.tkUsuario
+                            userData: userData,
                         }
                     });
                 } else {
@@ -58,30 +52,9 @@ export default class Wait extends React.Component {
             switch (goTo) {
                 
                 case 1:
+                    let token = props.navigation.getParam('token');
                     
-                    let tkSesion = props.navigation.getParam('tkSesion');
-                    let tkUsuario = props.navigation.getParam('tkUsuario');
-                    
-                    try {
-                        const dataTokens = await AsyncStorage.getItem('dataTokens');
-
-                        if ( dataTokens && Array.isArray(JSON.parse(dataTokens)) ) {
-
-                            this.props.navigation.navigate({
-                                routeName: 'Integrations',
-                                params: {
-                                    dataTokens: dataTokens,
-                                    tkSesion: tkSesion,
-                                    tkUsuario: tkUsuario
-                                }
-                            })
-                        } else {
-                            this.loadTokens(tkSesion, tkUsuario);
-                        }
-                        
-                      } catch (error) {
-                          this.loadTokens(tkSesion, tkUsuario);                        
-                      }
+                    this.getSessionToken(token);
 
                     break;
 
@@ -130,14 +103,14 @@ export default class Wait extends React.Component {
     //     return true;
     // }
 
-    async loadTokens(tkSesion, tkUsuario) {
+    async getSessionToken(token) {
 
-        let urlIntegracion = 'https://api.salesup.com/integraciones?pagina=0';
+        let urlIntegracion = 'https://api.salesup.com/integraciones/sesion';
 
         let dataHeader = {
-            method: 'GET',
+            method: 'POST',
             headers: {
-                "token": tkSesion
+                "token": token
             }
         };
 
@@ -145,24 +118,24 @@ export default class Wait extends React.Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 if (responseJson) {
-                    let dataTemp = responseJson.filter(function (item) {
-                        return item.tipoIntegracion == 7 || item.tipoIntegracion == 8;
-                    });
 
-                    AsyncStorage.setItem('dataTokens', JSON.stringify(dataTemp));
+                    let dataTemp = {
+                        token           : token,
+                        sessionToken    : responseJson[0].token
+                    };
+
+                    AsyncStorage.setItem('userData', JSON.stringify(dataTemp));
 
                     this.props.navigation.navigate({
-                        routeName: 'Integrations',
+                        routeName: 'Main',
                         params: {
-                            dataTokens: dataTemp,
-                            tkSesion: tkSesion,
-                            tkUsuario: tkUsuario
+                            userData: JSON.stringify(dataTemp)
                         }
                     })                    
 
                 } else {
 
-                    this.backToHome('Integraciones', 'Al parecer la cuenta no cuenta con ning&uacute;n token configurado, entra a tu cuenta y crea uno para continuar.');
+                    this.backToHome('Integraciones', entities.decode('Al parecer ha ocurrido un error con el token, aseg&uacute;rate de que es correcto.'));
                     return false;
                 }
             })

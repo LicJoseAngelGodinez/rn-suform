@@ -33,10 +33,9 @@ export default class Main extends React.Component {
     super(props);
     this.AnimatedHeaderValue = new Animated.Value(0);
     this.state = {
-      credentials: 2,
-      username: null,
-      tkSesion: null,
-      tkUsuario: null,
+      userData: null,
+      sessionToken: null,
+      token: null,
       msg: null
     };
     this.closeSessionAction = this.closeSessionAction.bind(this);
@@ -45,12 +44,13 @@ export default class Main extends React.Component {
 
   async loadCredentials() {
 
-    if (this.props.navigation.getParam('credentials') != 2) {
-      this.setState({ credentials: this.props.navigation.getParam('credentials') });
-      this.setState({ username: this.props.navigation.getParam('userName') });
-      this.setState({ tkSesion: this.props.navigation.getParam('tkSesion') });
-      this.setState({ tkUsuario: this.props.navigation.getParam('tkUsuario') });
-      this.setValue('userData', JSON.stringify(this.props.navigation.getParam('credentials')));
+    if (this.props.navigation.getParam('userData')) {
+
+      let userData = this.props.navigation.getParam('userData');
+
+      this.setState({ userData: userData });
+      userData = JSON.parse(userData);
+      this.setState({ sessionToken: userData.token });
 
       try {
         let msg = this.props.navigation.getParam('msg');
@@ -146,7 +146,7 @@ export default class Main extends React.Component {
   }
 
   render() {
-    const { username, tkUsuario, tkSesion } = this.state;
+    const { sessionToken } = this.state;
 
     const AnimateHeaderBackgroundColor = this.AnimatedHeaderValue.interpolate(
       {
@@ -166,7 +166,7 @@ export default class Main extends React.Component {
         extrapolate: 'clamp'
       });
 
-    if (username != null) {
+    if (sessionToken != null) {
       return (
         <View style={myStyles.MainContainer}>
           <Animated.View
@@ -179,7 +179,7 @@ export default class Main extends React.Component {
             ]}>
 
             <Text style={myStyles.HeaderInsideText}>
-              {entities.decode(username)}
+              {entities.decode('Bienvenido')}
             </Text>
           </Animated.View>
           <ScrollView

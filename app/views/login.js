@@ -29,9 +29,8 @@ export default class LoginView extends Component {
         super(props);
 
         this.state = {
-            user: '',
-            email: '',
-            password: '',
+            token: '',
+            tokenSesion: '',
             isLoading: false,
             Isbuttonenable: false,
         };
@@ -40,34 +39,34 @@ export default class LoginView extends Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.exitAppAction);
-      }
-    
-      componentWillUnmount () {
+    }
+
+    componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.exitAppAction)
-      }
-    
-      exitAppAction() {
+    }
+
+    exitAppAction() {
         Alert.alert(
-          'Salir',
-          entities.decode('Desea salir de la aplicaci&oacute;n?'),
-          [
-            {
-              text: 'Cancelar',
-              style: 'cancel',
-            },
-            {
-              text: 'Salir',
-              onPress: () => {   
-                  BackHandler.exitApp();         
-                return true;
-              }
-            },
-          ],
-          { cancelable: true },
+            'Salir',
+            entities.decode('Desea salir de la aplicaci&oacute;n?'),
+            [
+                {
+                    text: 'Cancelar',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Salir',
+                    onPress: () => {
+                        BackHandler.exitApp();
+                        return true;
+                    }
+                },
+            ],
+            { cancelable: true },
         );
         return true;
-    
-      }
+
+    }
 
     toast(msg) {
         ToastAndroid.showWithGravityAndOffset(
@@ -99,42 +98,49 @@ export default class LoginView extends Component {
 
     loadLoginData = (accounOption) => {
 
-        switch ( accounOption ) {
+        switch (accounOption) {
             case 1:
-                this.login({
-                    user: 'salesupnewton@gmail.com',
-                    password: 'Salesup2016!'
-                });
+                this.props.navigation.navigate({
+                    routeName: 'Wait',
+                    params: {
+                        goTo: 1,
+                        token: 'P0122CE87AA-1379-4F28-AA86-082D705BC884!'
+                    }
+                })
                 break;
 
-            case 2:                
-                this.login({
-                    user: 'angel@prueba.com',
-                    password: 'Salesup2016!'
-                });
+            case 2:
+                this.props.navigation.navigate({
+                    routeName: 'Wait',
+                    params: {
+                        goTo: 1,
+                        token: 'P0165DD8D50-FDCB-4693-BF16-2A94DD1B43B3'
+                    }
+                })
                 break;
 
             case 3:
-                this.login({
-                    user: 'salesupsocrates@gmail.com',
-                    password: 'Salesup2016!'
-                });
+                this.props.navigation.navigate({
+                    routeName: 'Wait',
+                    params: {
+                        goTo: 1,
+                        token: 'P012DA7A29C-FC41-44A3-925E-E46464339958'
+                    }
+                })
                 break;
         }
     }
 
     login = (obj) => {
 
-        let user = '';
-        let password = '';
-        if ( !obj ) {
+        let token = '';
+        if (!obj) {
 
-            const { user, password } = this.state;
+            const { token } = this.state;
 
         } else {
 
-            user = ( obj.user );
-            password = ( obj.password );
+            token = (obj.token);
 
         }
 
@@ -142,33 +148,28 @@ export default class LoginView extends Component {
 
         Keyboard.dismiss();
 
-        let loginURL = 'https://api.salesup.com/login';
-        let formData = new FormData();
-
-        formData.append('usuario', user);
-        formData.append('contrasenia', password);
+        let loginURL = 'https://api.salesup.com/integraciones/sesion';
 
         let dataHeader = {
             method: 'POST',
-            body: formData
+            token: token
         };
 
         fetch(loginURL, dataHeader)
             .then((response) => response.json())
             .then((responseJson) => {
 
-                if (responseJson[0].tkSesion) {
-                    let userTemp = responseJson[0];
-                    userTemp = userTemp.nombre + ' ' + userTemp.apellidos;
+                if (responseJson[0].token) {
                     this.ShowHideActivityIndicator();
 
                     return this.props.navigation.navigate({
-                        routeName:'Main', 
+                        routeName: 'Wait',
                         params: {
-                            credentials     : responseJson[0],
-                            userName        : userTemp,
-                            tkSesion        : responseJson[0].tkSesion
-                        }});
+                            goTo: 1,
+                            token: token,
+                            tokenSesion: responseJson[0].token
+                        }
+                    });
                 } else {
                     this.ShowHideActivityIndicator();
                     Alert.alert('Acceso', entities.decode('El usuario y/o contrase&ntilde;a no es correcto.'));
@@ -194,12 +195,12 @@ export default class LoginView extends Component {
                     <Image source={require('./../assets/images/letter-logo.jpg')} style={{ width: '100%', height: 100 }} />
                 </View>
                 <View style={myStyles.inputContainer}>
-                    <Image style={myStyles.inputIcon} source={require('./../assets/images/mail.png')} />
+                    <Image style={myStyles.inputIcon} source={require('./../assets/images/key.png')} />
                     <TextInput style={myStyles.inputs}
                         placeholder={entities.decode('Token de Integraci&oacute;n')}
                         keyboardType="default"
                         autoCapitalize='none'
-                        onChangeText={(user) => this.setState({ user })}
+                        onChangeText={(token) => this.setState({ token })}
                     />
                 </View>
 
@@ -216,7 +217,14 @@ export default class LoginView extends Component {
                 <TouchableHighlight
                     disabled={this.state.Isbuttonenable}
                     style={!this.state.Isbuttonenable ? [myStyles.buttonContainer, myStyles.loginButton] : [myStyles.buttonContainer, myStyles.loginButtonDisabled]}
-                    onPress={() => this.login()}>
+                    onPress={() => this.props.navigation.navigate({
+                        routeName: 'Wait',
+                        params: {
+                            goTo: 1,
+                            token: token
+                        }
+                    })
+                    }>
                     <Text style={{ color: '#FFFFFF' }}>Entrar</Text>
                 </TouchableHighlight>
 
@@ -234,29 +242,29 @@ export default class LoginView extends Component {
                     <Text style={!this.state.Isbuttonenable ? myStyles.loginText : myStyles.loginTextDisabled}>Registro</Text>
                 </TouchableHighlight>
 
-                <View style={{flexDirection: 'row'}}>
-                    <View style={{padding: 3}}>
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={{ padding: 3 }}>
                         <Button
                             onPress={() => this.loadLoginData(1)}
+                            title={entities.decode('&Aacute;ngel')}
+                            color="#7b1fa2"
+                            disabled={this.state.Isbuttonenable}
+                            accessibilityLabel=" XXXX "
+                        />
+                    </View>
+                    <View style={{ padding: 3 }}>
+                        <Button
+                            onPress={() => this.loadLoginData(2)}
                             title="Newton"
                             color="#7b1fa2"
                             disabled={this.state.Isbuttonenable}
                             accessibilityLabel=" XXXX "
                         />
                     </View>
-                    <View style={{padding: 3}}>
-                        <Button
-                            onPress={() => this.loadLoginData(2)}
-                            title="Angel"
-                            color="#7b1fa2"
-                            disabled={this.state.Isbuttonenable}
-                            accessibilityLabel=" XXXX "
-                        />
-                    </View>
-                    <View style={{padding: 3}}>
+                    <View style={{ padding: 3 }}>
                         <Button
                             onPress={() => this.loadLoginData(3)}
-                            title="Socrates"
+                            title="Mayola"
                             color="#7b1fa2"
                             disabled={this.state.Isbuttonenable}
                             accessibilityLabel=" XXXX "
