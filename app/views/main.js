@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   Alert,
@@ -215,7 +214,12 @@ export default class Main extends React.Component {
                 <Text style={myStyles.TextStyle}> Formularios </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.5} onPress={() => this.toast('Nuevo formulario')}>
+            <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate({
+                        routeName: 'Wait',
+                        params: {
+                            goTo: 2,
+                            tkSesion: sessionToken,
+                        }})}>
 
             <View style={myStyles.mainMenuButton}>
                 <Image

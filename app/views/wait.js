@@ -58,6 +58,13 @@ export default class Wait extends React.Component {
 
                     break;
 
+                case 2:
+                    let configToken = props.navigation.getParam('token');
+                    
+                    this.getConfigurationData(configToken);
+
+                    break;
+
                 default:
                     this.props.navigation.navigate('Login');
             }
@@ -142,6 +149,15 @@ export default class Wait extends React.Component {
             .catch((error) => {
                 this.backToHome('Integraciones', 'Favor de revisar tu acceso a datos o la conexi&oacute;n inal&aacute;mbrica.');
             });
+    }
+
+    async getConfigurationData (sessionToken) {
+        this.props.navigation.navigate({
+            routeName: 'FormConfigurations',
+            params: {
+                data: sessionToken,
+            }
+        }) 
     }
 
     backToHome(title, msg) {

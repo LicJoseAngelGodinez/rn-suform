@@ -21,6 +21,7 @@ import Wait from './views/wait';
 import Login from './views/login';
 import Main from './views/main';
 import Integrations from './views/integrations';
+import FormConfigurations from './views/formConfigurations';
 
 const entities = new Entities.AllHtmlEntities();
 
@@ -65,6 +66,14 @@ const Router = createStackNavigator({
             // ),
             headerTintColor: '#7b1fa2'
         }
+    },
+    FormConfigurations: {
+        screen: FormConfigurations,
+        navigationOptions: {
+            title: 'Nuevo formulario',
+            headerLeft: null,
+            headerTintColor: '#7b1fa2',
+        },
     }
 });
 
