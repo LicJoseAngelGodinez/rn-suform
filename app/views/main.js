@@ -132,7 +132,7 @@ export default class Main extends React.Component {
 
   toast = (buttonId) => {
     ToastAndroid.showWithGravityAndOffset(
-      'A wild toast appeared! Toco: ' + buttonId,
+      'Toco: ' + buttonId,
       ToastAndroid.SHORT,
       ToastAndroid.BOTTOM,
       25,
