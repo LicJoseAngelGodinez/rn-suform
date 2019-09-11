@@ -172,4 +172,29 @@ export default StyleSheet.create({
         fontSize: RFValue(20),
         textAlign: 'left',
      },
+     // Nuevo formulario
+     buttonFormText: {
+        fontSize: 18,
+        color: 'white',
+        alignSelf: 'center'
+    },
+    buttonForm: {
+        height: 36,
+        backgroundColor: '#7b1fa2',
+        borderColor: '#7b1fa2',
+        borderWidth: 1,
+        borderRadius: 30,
+        marginBottom: 10,
+        alignSelf: 'stretch',
+        justifyContent: 'center'
+    },
+    containerForm: {
+        justifyContent: 'center',
+        marginTop: Platform.OS == 'ios' ? 20 : 0,
+        padding: 20,
+        backgroundColor: '#ffffff',
+    },
+    textboxView: {
+        borderRadius: 30,
+    }
 });

@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import {
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
+    TouchableHighlight
+} from 'react-native';
+
+import myStyles from './../styles';
 
 import t from 'tcomb-form-native'; // 0.6.9
 
@@ -12,10 +20,14 @@ const Form = t.form.Form;
 const options = {
     fields: {
         titulo: {
-            label: entities.decode('T&iacute;tulo')
+            label: entities.decode('T&iacute;tulo'),
+            // stylesheet: myStyles,
         },
         descripcion: {
             label: entities.decode('Descripci&oacute;n'),
+        },
+        fase: {
+            placeholder: entities.decode('Seleccione opci&oacute;n'),
         },
     },
     i18n: {
@@ -25,13 +37,17 @@ const options = {
         remove: '?',  // remove button
         up: '?',      // move up button
         down: '?'     // move down button
-      }
+    },
 };
 
-const Person = t.struct({
+const newForm = t.struct({
+    nombre: t.String,
     titulo: t.String,              // a required string
     descripcion: t.maybe(t.String),  // an optional string
-    fase: t.Number,               // a required number
+    fase: t.enums({
+        M: 'Masculino',
+        F: 'Femenino'
+    }, entities.decode('G&eacute;nero')),               // a required number
     prueba: t.Boolean        // a boolean
 });
 
@@ -46,41 +62,17 @@ export default class FormConfigurations extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={myStyles.containerForm}>
                 {/* display */}
                 <Form
                     ref="form"
-                    type={Person}
+                    type={newForm}
                     options={options}
                 />
-                <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Guardar</Text>
+                <TouchableHighlight style={myStyles.buttonForm} onPress={this.onPress} underlayColor='#99d9f4'>
+                    <Text style={myStyles.buttonFormText}>Guardar</Text>
                 </TouchableHighlight>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
-        marginTop: 50,
-        padding: 20,
-        backgroundColor: '#ffffff',
-    },
-    buttonText: {
-        fontSize: 18,
-        color: 'white',
-        alignSelf: 'center'
-    },
-    button: {
-        height: 36,
-        backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
-        borderWidth: 1,
-        borderRadius: 8,
-        marginBottom: 10,
-        alignSelf: 'stretch',
-        justifyContent: 'center'
-    }
-});
