@@ -172,4 +172,11 @@ export default StyleSheet.create({
         fontSize: RFValue(20),
         textAlign: 'left',
      },
+
+     containerForm: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+     },
 });

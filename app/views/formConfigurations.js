@@ -86,7 +86,7 @@ export default class LoginView extends Component {
 
     render() {
         return (
-            <View style={myStyles.container}>
+            <View style={myStyles.containerForm}>
 
                 <Text>{entities.decode('Entr&oacute; a configuraci&oacute;n')}</Text>
 
