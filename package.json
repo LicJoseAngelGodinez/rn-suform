@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",
+    "@react-native-community/picker": "^1.0.0",
     "expo-linear-gradient": "^6.0.0",
     "html-entities": "^1.2.1",
     "react": "16.8.6",

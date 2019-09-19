@@ -152,12 +152,32 @@ export default class Wait extends React.Component {
     }
 
     async getConfigurationData (sessionToken) {
-        this.props.navigation.navigate({
-            routeName: 'FormConfigurations',
-            params: {
-                data: sessionToken,
-            }
-        }) 
+
+        let credentials = '';
+
+        if ( sessionToken ) {
+        
+            this.props.navigation.navigate({
+                routeName: 'FormConfigurations',
+                params: {
+                    data: sessionToken,
+                }
+            });
+
+        } else {
+
+            credentials = await AsyncStorage.getItem('userData');
+            credentials = JSON.parse(credentials);
+            sessionToken = credentials.sessionToken;
+
+            this.props.navigation.navigate({
+                routeName: 'FormConfigurations',
+                params: {
+                    data: sessionToken,
+                }
+            }) 
+
+        }
     }
 
     backToHome(title, msg) {
